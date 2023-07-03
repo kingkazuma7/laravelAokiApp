@@ -1,2 +1,7 @@
 <!-- ③ビュー -->
-test blade
+test blade<br>
+
+@foreach($values as $value)
+{{ $value->id }}<br>
+{{ $value->text }}<br>
+@endforeach
