@@ -11,8 +11,12 @@ class TestController extends Controller
     // ②コントローラー
     public function index()
     {
-        $values = Test::all(); // 全件
-        // dd($values);
+        $values = Test::all(); // 全件（エロクアント）
+        $count = Test::count();
+        $first = Test::findOrFail(1);
+        $whereBBB = Test::where('text', '=', 'bbb')->get();
+        dd($values, $count, $first, $whereBBB);
+        // ddd($values, $count, $first, $whereBBB);
         return view('tests.test', compact('values')); // フォルダ/ファイル名
     }
 }
