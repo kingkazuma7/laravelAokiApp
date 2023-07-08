@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\ContactFormController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +16,18 @@ use App\Http\Controllers\TestController;
 */
 
 Route::get('tests/test', [ TestController::class, 'index' ]);
+
+// Route::resource('contacts', ContactFormController::class); // 7つまとめて
+Route::get('contacts', [ ContactFormController::class, 'index'])->name('contacts.index');
+
+// 基礎→ルーティング
+Route::prefix('contacts')
+->middleware(['auth'])
+->controller(ContactFormController::class)
+->name('contacts.')
+->group(function () {
+    Route::get('/', 'index')->name('index');
+});
 
 Route::get('/', function () {
     return view('welcome');
