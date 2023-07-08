@@ -13,6 +13,8 @@ class TestController extends Controller
     // ②コントローラー
     public function index()
     {
+        dd('test');
+        
         // 全件（エロクアント） ※クエリビルダより主流
         $values = Test::all(); // モデル名::メソッド
         $count = Test::count();
