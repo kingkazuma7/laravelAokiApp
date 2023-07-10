@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ContactForm;
 
 class ContactFormController extends Controller
 {
@@ -13,7 +14,8 @@ class ContactFormController extends Controller
      */
     public function index()
     {
-        return view('contacts.index');
+        $contacts = ContactForm::select('id', 'name', 'title', 'created_at')->get();
+        return view('contacts.index', compact('contacts')); //viewへ渡す
     }
 
     /**
@@ -34,7 +36,19 @@ class ContactFormController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request, $request->name);
+        
+        ContactForm::create([ // model ContactForm
+            'name' => $request->name,
+            'title' => $request->title,
+            'email' => $request->email,
+            'url' => $request->url,
+            'gender' => $request->gender,
+            'age' => $request->age,
+            'contact' => $request->contact,
+        ]);
+        
+        return to_route('contacts.index'); //フォルダ名/ファイル名
     }
 
     /**
@@ -45,7 +59,40 @@ class ContactFormController extends Controller
      */
     public function show($id)
     {
-        //
+        $contact = ContactForm::find($id);
+        
+        // 性別
+        if($contact->gender === 0) {
+            $gender = '男性';
+        } else {
+            $gender = '女性';
+        }
+        
+        // 年齢
+        $age = ''; // $age変数を初期化
+        if ($contact->age === 1) {
+            $age = '〜19歳';
+        }
+        if ($contact->age === 2) {
+            $age = '20歳〜29歳';
+        }
+        if ($contact->age === 3) {
+            $age = '30歳〜39歳';
+        }
+        if ($contact->age === 4) {
+            $age = '40歳〜49歳';
+        }
+        if ($contact->age === 5) {
+            $age = '50歳〜59歳';
+        }
+        if ($contact->age === 6) {
+            $age = '60歳〜';
+        }
+        if ($contact->age === 7) {
+            $age = '年齢不明';
+        }
+        
+        return view('contacts.show', compact('contact', 'gender','age'));
     }
 
     /**
@@ -56,7 +103,9 @@ class ContactFormController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = ContactForm::find($id);
+        
+        return view('contacts.edit', compact('contact'));
     }
 
     /**
