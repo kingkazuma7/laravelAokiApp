@@ -59,7 +59,13 @@
                                     </div>
                                     <form method="GET" action="{{ route('contacts.edit', [$contact->id]) }}">
                                         <div class="p-2 w-full">
-                                            <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">編集をする</button>
+                                            <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">編集する</button>
+                                        </div>
+                                    </form>
+                                    <form id="delete_{{ $contact->id }}" method="POST" action="{{ route('contacts.destroy', [$contact->id]) }}">
+                                        @csrf
+                                        <div class="p-2 w-full">
+                                            <a data-id="{{ $contact->id }}" onclick="deletePost(this)" class="flex mx-auto text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg w-fit">削除する</a>
                                         </div>
                                     </form>
                                 </div>
@@ -70,4 +76,12 @@
             </div>
         </div>
     </div>
+    <script defer>
+        function deletePost(e) {
+            if(confirm('本当に削除してもいいですか？')) {
+                document.getElementById('delete_' + e.dataset.id).submit();
+                console.log(e.dataset.id);
+            }
+        }
+    </script>
 </x-app-layout>
