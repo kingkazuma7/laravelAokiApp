@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ContactForm;
-use App\Serveise\CheckFormService;
-use App\Services\CheckFormService as ServicesCheckFormService;
+use App\Services\CheckFormService;
+use App\Http\Requests\StoreContactRequest;
 
 class ContactFormController extends Controller
 {
@@ -36,9 +36,14 @@ class ContactFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         // dd($request, $request->name);
+        
+        // $request->validate([
+        //     'name' => 'required',
+        //     // other validation rules for other fields
+        // ]);
         
         ContactForm::create([ // model ContactForm
             'name' => $request->name,
@@ -62,12 +67,13 @@ class ContactFormController extends Controller
     public function show($id)
     {
         $contact = ContactForm::find($id);
+
+        $gender = CheckFormService::checkGender($contact);
         
-        $gender = ServicesCheckFormService::checkGender($contact);
-        
-        $age = ServicesCheckFormService::checkAge($contact);
-        
-        return view('contacts.show', compact('contact', 'gender','age'));
+        $age = CheckFormService::checkAge($contact);
+
+        return view('contacts.show', 
+        compact('contact', 'gender', 'age'));
     }
 
     /**
